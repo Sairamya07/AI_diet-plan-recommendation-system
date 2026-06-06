@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>AI Diet Assistant</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen">
+    <div class="loader">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="shadow"></div>
+      <div class="shadow"></div>
+      <div class="shadow"></div>
+      <span>Loading Diet AI...</span>
+    </div>
+  </div>
+
+  <!-- LOGOUT CONFIRMATION MODAL -->
+  <div id="logout-modal" class="hidden">
+    <div class="glass-card modal-box">
+      <h3>⚠️ Confirm Logout</h3>
+      <p>Are you sure you want to end your session?</p>
+      <div class="modal-actions">
+        <button onclick="confirmLogout()" class="confirm-btn">Exit</button>
+        <button onclick="closeLogoutModal()" class="cancel-btn">Stay</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app">
+    <!-- AUTHENTICATION -->
+    <!-- NAVBAR -->
+    <nav class="navbar glass-card">
+      <h1 class="nav-title">AI Based Diet Plan Recommendation System</h1>
+    </nav>
+
+    <!-- AUTHENTICATION -->
+    <div id="auth-container">
+      <div class="auth-wrapper">
+        <!-- LEFT SIDE: INFO -->
+        <div class="glass-card info-box">
+          <h2>About The Project</h2>
+          <p class="project-desc">
+            An intelligent AI-powered system designed to provide personalized diet recommendations based on your unique
+            health profile and goals.
+          </p>
+
+          <div class="team-section">
+            <div class="team-block">
+              <h3>Developed By</h3>
+              <ul class="team-list">
+                <li>Jahnavi</li>
+                <li>Ramya Sri</li>
+                <li>Damayanthi</li>
+              </ul>
+            </div>
+
+            <div class="team-block">
+              <h3>Guided By</h3>
+              <p class="guide-name">Abdul Aziz Md Sir</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE: LOGIN FORM -->
+        <div class="glass-card auth-box">
+          <h2 id="auth-title">Welcome Back</h2>
+          <input type="text" id="auth-username" placeholder="Username" />
+          <div class="password-container">
+            <input type="password" id="auth-password" placeholder="Password" />
+            <svg id="toggle-icon" onclick="togglePassword()" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
+          <button onclick="handleAuth()" id="auth-btn">Login</button>
+          <p id="auth-toggle" onclick="toggleAuthMode()">New here? Sign up</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-container" class="hidden">
+      <div class="sidebar glass-card">
+        <div class="sidebar-logo-container">
+          <img src="logo_3d.png" alt="Diet AI 3D Logo" class="sidebar-logo-3d">
+        </div>
+
+        <button onclick="showSection('profile')" id="nav-profile">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Profile
+        </button>
+        <button onclick="showSection('chat')" id="nav-chat">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Chat
+        </button>
+        <button onclick="showSection('history')" id="nav-history">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          History
+        </button>
+        <button onclick="logout()" class="logout-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+          </svg>
+          Sign Out
+        </button>
+      </div>
+
+      <div class="main-content glass-card">
+
+        <!-- CHAT SECTION (DEFAULT) -->
+        <div id="chat-section" class="section">
+          <div class="chat-header">
+            Dietary Assistant
+            <span
+              style="font-size:0.5em; margin-left:auto; background:rgba(0,255,136,0.2); color:#00ff88; padding:4px 8px; border-radius:12px; border:1px solid #00ff88;">✓
+              Profile Connected</span>
+          </div>
+          <div id="chat-box"></div>
+          <div class="chat-input">
+            <input id="chat-input" placeholder="Ask for diet plans..." />
+            <button onclick="sendChat()">➤</button>
+          </div>
+        </div>
+
+        <!-- PROFILE SECTION -->
+        <div id="profile-section" class="section hidden">
+          <h2>Your Profile</h2>
+          <div class="profile-grid">
+            <div class="form-group">
+              <label>Name</label>
+              <input id="p-name" placeholder="Name" />
+            </div>
+
+            <div class="form-group">
+              <label>Age</label>
+              <input id="p-age" type="number" placeholder="Age" />
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="p-gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Height (cm)</label>
+              <input id="p-height" type="number" placeholder="Height (cm)" />
+            </div>
+
+            <div class="form-group">
+              <label>Weight (kg)</label>
+              <input id="p-weight" type="number" placeholder="Weight (kg)" />
+            </div>
+
+            <div class="form-group">
+              <label>Activity Level</label>
+              <select id="p-activity">
+                <option value="low">Low Activity</option>
+                <option value="moderate">Moderate Activity</option>
+                <option value="high">High Activity</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Food Preference</label>
+              <select id="p-food">
+                <option value="veg">Vegetarian</option>
+                <option value="non-veg">Non-Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="eggetarian">Eggetarian</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Allergies</label>
+              <select id="p-allergies">
+                <option value="none">No Allergies</option>
+                <option value="lactose">Lactose Intolerance</option>
+                <option value="gluten">Gluten Sensitivity</option>
+                <option value="nuts">Nut Allergy</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Medical Conditions</label>
+              <select id="p-medical">
+                <option value="none">No Medical Conditions</option>
+                <option value="diabetes">Diabetes</option>
+                <option value="bp">High BP</option>
+                <option value="thyroid">Thyroid Issue</option>
+                <option value="pcos">PCOS</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Meals Per Day</label>
+              <input id="p-meals" type="number" placeholder="Meals per day (1-5)" min="1" max="5" />
+            </div>
+
+            <div class="form-group">
+              <label>Fitness Goal</label>
+              <select id="p-goal">
+                <option value="loss">Weight Loss</option>
+                <option value="gain">Weight Gain</option>
+                <option value="maintain">Maintain Weight</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="updateProfile()">Update Profile</button>
+        </div>
+
+        <!-- HISTORY SECTION -->
+        <div id="history-section" class="section hidden">
+          <div class="history-header">
+            <h2>Chat History</h2>
+            <button class="delete-btn" onclick="deleteHistory()">Delete All</button>
+          </div>
+          <div id="history-list"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
