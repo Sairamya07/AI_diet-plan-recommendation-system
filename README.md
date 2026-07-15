@@ -388,9 +388,9 @@ Final Year B.Tech (Artificial Intelligence & Machine Learning)
 
 Python Full Stack Developer | AI Enthusiast
 
-📧 Email: your-email@example.com
+📧 Email:ramyathangella434@gmail.com
 
-🔗 LinkedIn: https://linkedin.com/in/your-profile
+🔗 LinkedIn:https://www.linkedin.com/in/ramyasritangella
 
 💻 GitHub: https://github.com/Sairamya07
 
